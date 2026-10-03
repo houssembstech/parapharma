@@ -317,3 +317,35 @@ export const getProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
+// @desc   Update user password
+// @route  PUT /api/auth/profile/password
+// @access Private
+export const updatePassword = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    const { currentPassword, newPassword } = req.body;
+    
+    if (!(await user.matchPassword(currentPassword))) {
+      res.status(401);
+      throw new Error("Mot de passe actuel incorrect");
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      res.status(400);
+      throw new Error("Le nouveau mot de passe doit contenir au moins 6 caractères");
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Mot de passe mis à jour avec succès"
+    });
+  } else {
+    res.status(404);
+    throw new Error("Utilisateur non trouvé");
+  }
+});

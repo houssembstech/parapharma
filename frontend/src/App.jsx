@@ -38,6 +38,7 @@ import OrderDetails from './pages/OrderDetails';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Chat from './pages/Chat';
 import AdminChat from './pages/Admin/AdminChat';
+import Settings from './pages/Admin/Settings';
 
 import LoadingSpinner from './components/Common/LoadingSpinner';
 
@@ -171,6 +172,12 @@ function AppContent() {
             path="/admin/chat"
             element={
               isAuthenticated && user?.role === 'admin' ? <AdminChat /> : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="/admin/settings"
+            element={
+               isAuthenticated && user?.role === 'admin' ? <Settings /> : <Navigate to="/" replace />
             }
           />
 
