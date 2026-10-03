@@ -11,8 +11,8 @@ import { PromotionProvider } from './context/PromotionContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Products from './pages/Products';
 
-import CategoriesPage from './pages/Categories.jsX';
-import CategoryDetail from './pages/CategoryDetail.jsX';
+import CategoriesPage from './pages/Categories.jsx';
+import CategoryDetail from './pages/CategoryDetail.jsx';
 //import About from './pages/About';
 
 import Navbar from './components/Layout/Navbar';
