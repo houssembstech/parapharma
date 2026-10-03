@@ -209,19 +209,7 @@ const UserManagement = () => {
                   </p>
                 </div>
                 
-                <div className="col-md-6">
-                  <div className="d-flex align-items-center gap-2 flex-wrap justify-content-md-end">
-                    <Link className="btn btn-success d-inline-flex align-items-center" to="/admin/users/create">
-                      <FiUserPlus className="me-2" />
-                      Nouvel Utilisateur
-                    </Link>
-                    
-                    <div className="bg-light rounded-pill px-3 py-2 text-muted small d-flex align-items-center">
-                      <FiCalendar className="me-2" />
-                      {new Date().toLocaleDateString('fr-FR')}
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -300,7 +288,7 @@ const UserManagement = () => {
                       <th className="border-0">Utilisateur</th>
                       <th className="border-0">Email</th>
                       <th className="border-0 text-center">Rôle</th>
-                      <th className="border-0 text-center">Statut</th>
+                      
                       <th className="border-0">Date d'inscription</th>
                       <th className="border-0 text-center">Actions</th>
                     </tr>
@@ -328,17 +316,7 @@ const UserManagement = () => {
                             {user.role === 'admin' ? 'Administrateur' : 'Client'}
                           </span>
                         </td>
-                        <td className="text-center">
-                          <select
-                            className={`form-select form-select-sm border-0 text-white ${getStatusBadgeClass(user.status)}`}
-                            value={user.status}
-                            onChange={(e) => handleStatusChange(user._id, e.target.value)}
-                            style={{ minWidth: '120px' }}
-                          >
-                            <option value="active">Actif</option>
-                            <option value="inactive">Inactif</option>
-                          </select>
-                        </td>
+                        
                         <td>
                           <small className="text-muted">
                             {new Date(user.createdAt).toLocaleDateString('fr-FR')}

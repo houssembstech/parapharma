@@ -1,7 +1,7 @@
 // Helper function to get complete image URL
 export const getImageUrl = (imagePath) => {
   if (!imagePath) {
-    return '/api/placeholder/300/300'; // Fallback placeholder
+    return 'https://placehold.co/400x400?text=Image'; // Fallback placeholder
   }
 
   // If it's already a full URL, return as is

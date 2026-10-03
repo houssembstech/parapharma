@@ -439,7 +439,7 @@ const ProductForm = () => {
                                         }}
                                         alt={`Product image ${index + 1}`}
                                         onError={(e) => {
-                                          e.target.src = '/api/placeholder/100/100';
+                                          e.target.src = 'https://placehold.co/400x400?text=Image';
                                         }}
                                       />
                                       <div className="position-absolute top-0 end-0 p-1">

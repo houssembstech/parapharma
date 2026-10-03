@@ -2,6 +2,7 @@
   "name": "parapharmacie-backend",
   "version": "1.0.0",
   "description": "Backend for Parapharmacie Tunisia (Express + MongoDB)",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -22,6 +23,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.3.1",
     "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.7",
     "slugify": "^1.6.6",
     "socket.io": "^4.8.1",

@@ -170,7 +170,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Parapharmacie TN</h1>
+              <h1>Parapharmacie 25</h1>
             </div>
             <div class="content">
               <h2>Réinitialisation de votre mot de passe</h2>
@@ -186,7 +186,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
               <p>Si vous n'avez pas demandé cette réinitialisation, ignorez simplement cet email.</p>
             </div>
             <div class="footer">
-              <p>Cordialement,<br>L'équipe Parapharmacie TN</p>
+              <p>Cordialement,<br>L'équipe Parapharmacie25</p>
             </div>
           </div>
         </body>
@@ -195,7 +195,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
       await sendEmail({
         to: user.email,
-        subject: 'Réinitialisation de votre mot de passe - Parapharmacie TN',
+        subject: 'Réinitialisation de votre mot de passe - Parapharmacie25',
         html: emailHtml
       });
 

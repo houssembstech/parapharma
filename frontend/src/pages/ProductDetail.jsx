@@ -104,7 +104,7 @@ const ProductDetail = () => {
     } else if (product.mainImage) {
       return [getImageUrl(product.mainImage)];
     } else {
-      return [getImageUrl('/api/placeholder/400/400')];
+      return [getImageUrl('https://placehold.co/400x400?text=Image')];
     }
   };
 
@@ -269,7 +269,7 @@ const ProductDetail = () => {
                           className="img-fluid rounded"
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           onError={(e) => {
-                            e.target.src = getImageUrl('/api/placeholder/60/60');
+                            e.target.src = getImageUrl('https://placehold.co/400x400?text=Image');
                           }}
                         />
                       </button>

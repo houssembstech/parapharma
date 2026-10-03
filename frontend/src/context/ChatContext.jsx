@@ -17,57 +17,90 @@ export const ChatProvider = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const socket = useRef(null);
 
-  // Use import.meta.env for Vite
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+  // Définir l'ID admin
+  const ADMIN_ID = "69147c245c5da4da1f43483d";
+
+  // Clé de stockage basée sur l'utilisateur actuel
+  const getStorageKey = (partnerId = null) => {
+    if (!user) return null;
+    
+    // Pour les clients, toujours stocker avec l'admin
+    if (user.role !== 'admin' && !partnerId) {
+      partnerId = ADMIN_ID;
+    }
+    
+    if (partnerId) {
+      return `chat_${user._id}_${partnerId}`;
+    }
+    return `chats_list_${user._id}`;
+  };
+
+  // Sauvegarder les messages dans localStorage
+  const saveMessagesToStorage = (partnerId, messages) => {
+    try {
+      const storageKey = getStorageKey(partnerId);
+      if (storageKey) {
+        localStorage.setItem(storageKey, JSON.stringify(messages));
+      }
+    } catch (err) {
+      console.error('Erreur sauvegarde messages:', err);
+    }
+  };
+
+  // Charger les messages depuis localStorage
+  const loadMessagesFromStorage = (partnerId) => {
+    try {
+      const storageKey = getStorageKey(partnerId);
+      if (storageKey) {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved) : [];
+      }
+    } catch (err) {
+      console.error('Erreur chargement messages:', err);
+    }
+    return [];
+  };
 
   // Initialize socket connection
   useEffect(() => {
     if (user && token) {
-      socket.current = io(API_URL.replace('/api', ''), { // Remove /api for socket connection
-        auth: {
-          token: token
-        }
+      socket.current = io(API_URL.replace('/api', ''), {
+        auth: { token }
       });
 
-      // Join user's personal room
       socket.current.emit('join_user', user._id);
 
       // Listen for incoming messages
       socket.current.on('receive_message', (message) => {
+        console.log('Message reçu:', message);
+        
         setMessages(prev => {
-          if (prev.find(msg => msg._id === message._id)) return prev;
-          return [...prev, message];
+          const messageExists = prev.find(msg => msg._id === message._id);
+          if (messageExists) return prev;
+          
+          const newMessages = [...prev, message];
+          
+          // Sauvegarder dans localStorage
+          const partnerId = user.role === 'admin' ? message.sender._id : ADMIN_ID;
+          saveMessagesToStorage(partnerId, newMessages);
+          
+          return newMessages;
         });
 
-        // Update chats list
+        // Mettre à jour la liste des chats
         updateChatsList(message);
         
-        // Update unread count
         if (message.receiver._id === user._id) {
           setUnreadCount(prev => prev + 1);
         }
-      });
-
-      // Listen for chat updates
-      socket.current.on('chat_updated', () => {
-        fetchChats();
       });
 
       // Listen for typing indicators
       socket.current.on('user_typing', (data) => {
         if (data.senderId === activeChatUser?._id) {
           setIsTyping(data.isTyping);
-        }
-      });
-
-      // Listen for messages read confirmation
-      socket.current.on('messages_read', (data) => {
-        if (data.chatId === [user._id, activeChatUser?._id].sort().join('_')) {
-          setMessages(prev => 
-            prev.map(msg => 
-              msg.receiver === user._id ? { ...msg, isRead: true } : msg
-            )
-          );
         }
       });
 
@@ -83,10 +116,16 @@ export const ChatProvider = ({ children }) => {
   const updateChatsList = (message) => {
     setChats(prev => {
       const chatId = message.chatId;
-      const existingChatIndex = prev.findIndex(chat => chat.chatId === chatId);
+      const partner = message.sender._id === user._id ? message.receiver : message.sender;
+      
+      const existingChatIndex = prev.findIndex(chat => 
+        chat.partner._id === partner._id
+      );
+      
+      let updatedChats;
       
       if (existingChatIndex !== -1) {
-        const updatedChats = [...prev];
+        updatedChats = [...prev];
         updatedChats[existingChatIndex] = {
           ...updatedChats[existingChatIndex],
           lastMessage: message.content,
@@ -96,22 +135,23 @@ export const ChatProvider = ({ children }) => {
             : updatedChats[existingChatIndex].unreadCount
         };
         const [movedChat] = updatedChats.splice(existingChatIndex, 1);
-        return [movedChat, ...updatedChats];
+        updatedChats = [movedChat, ...updatedChats];
       } else {
         const newChat = {
           chatId,
           lastMessage: message.content,
           timestamp: message.timestamp,
-          partner: message.sender._id === user._id ? message.receiver : message.sender,
-          partnerDetails: message.sender._id === user._id ? message.receiver : message.sender,
+          partner: partner,
           unreadCount: message.receiver._id === user._id ? 1 : 0
         };
-        return [newChat, ...prev];
+        updatedChats = [newChat, ...prev];
       }
+      
+      return updatedChats;
     });
   };
 
-  // Fetch all chats for user using the API utility
+  // Fetch all chats for user
   const fetchChats = async () => {
     if (!token) return;
     setLoadingChats(true);
@@ -119,7 +159,7 @@ export const ChatProvider = ({ children }) => {
       const response = await messageAPI.getChats();
       const mappedChats = response.data.map(chat => ({
         chatId: chat._id,
-        partner: chat.partnerDetails,
+        partner: chat.partnerDetails || chat.partner,
         lastMessage: chat.lastMessage || "",
         timestamp: chat.timestamp,
         unreadCount: chat.unreadCount || 0
@@ -127,14 +167,13 @@ export const ChatProvider = ({ children }) => {
 
       setChats(mappedChats);
       
-      // Calculate total unread count
       const totalUnread = mappedChats.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0);
       setUnreadCount(totalUnread);
       
     } catch (err) {
       const errorInfo = apiUtils.handleError(err, 'Failed to load chats');
       setError(errorInfo.error);
-      setChats([]);
+      console.log('Error loading chats, using empty list');
     } finally {
       setLoadingChats(false);
     }
@@ -142,27 +181,35 @@ export const ChatProvider = ({ children }) => {
 
   // Fetch messages for selected user
   const fetchMessages = async (partnerId) => {
-    if (!token || !partnerId) return [];
+    if (!token || !partnerId) {
+      // Pour les clients, charger depuis le stockage local
+      if (user?.role !== 'admin') {
+        const cachedMessages = loadMessagesFromStorage(ADMIN_ID);
+        setMessages(cachedMessages);
+      }
+      return [];
+    }
+    
     setLoadingMessages(true);
     try {
+      // Charger d'abord depuis le stockage local
+      const cachedMessages = loadMessagesFromStorage(partnerId);
+      setMessages(cachedMessages);
+
+      // Puis récupérer depuis l'API
       const response = await messageAPI.getMessages(partnerId);
-      setMessages(response.data || []);
+      const apiMessages = response.data || [];
       
-      // Mark messages as read via socket
-      if (socket.current && partnerId) {
-        socket.current.emit('mark_messages_read', {
-          chatId: [user._id, partnerId].sort().join('_'),
-          userId: user._id,
-          senderId: partnerId
-        });
-      }
+      setMessages(apiMessages);
+      saveMessagesToStorage(partnerId, apiMessages);
       
-      return response.data;
+      return apiMessages;
     } catch (err) {
       const errorInfo = apiUtils.handleError(err, 'Failed to load messages');
       setError(errorInfo.error);
-      setMessages([]);
-      return [];
+      // Utiliser les messages en cache en cas d'erreur
+      console.log('Using cached messages due to error');
+      return cachedMessages;
     } finally {
       setLoadingMessages(false);
     }
@@ -170,35 +217,46 @@ export const ChatProvider = ({ children }) => {
 
   // Send message using socket
   const sendMessage = async (receiverId, content) => {
-    if (!token || !content.trim() || !socket.current) return;
+    if (!token || !content.trim() || !socket.current) {
+      setError("Impossible d'envoyer le message");
+      return;
+    }
     
     try {
       const messageData = {
         senderId: user._id,
-        receiverId,
+        receiverId: receiverId,
         content: content.trim(),
         chatId: [user._id, receiverId].sort().join('_')
       };
 
-      // Emit message via socket
-      socket.current.emit('send_message', messageData);
+      console.log('Envoi message:', messageData);
 
       // Optimistically add message to UI
       const optimisticMessage = {
         _id: `temp-${Date.now()}`,
         sender: { _id: user._id, name: user.name },
-        receiver: receiverId,
+        receiver: { _id: receiverId },
         content: content.trim(),
         timestamp: new Date().toISOString(),
         isOptimistic: true,
         isRead: false
       };
 
-      setMessages(prev => [...prev, optimisticMessage]);
+      setMessages(prev => {
+        const newMessages = [...prev, optimisticMessage];
+        const storagePartnerId = user.role === 'admin' ? receiverId : ADMIN_ID;
+        saveMessagesToStorage(storagePartnerId, newMessages);
+        return newMessages;
+      });
+
+      // Emit message via socket
+      socket.current.emit('send_message', messageData);
 
     } catch (err) {
       const errorInfo = apiUtils.handleError(err, 'Failed to send message');
       setError(errorInfo.error);
+      throw err; // Propager l'erreur
     }
   };
 
@@ -207,7 +265,7 @@ export const ChatProvider = ({ children }) => {
     if (socket.current && receiverId) {
       socket.current.emit('typing_start', {
         senderId: user._id,
-        receiverId
+        receiverId: receiverId
       });
     }
   };
@@ -216,7 +274,7 @@ export const ChatProvider = ({ children }) => {
     if (socket.current && receiverId) {
       socket.current.emit('typing_stop', {
         senderId: user._id,
-        receiverId
+        receiverId: receiverId
       });
     }
   };
@@ -226,34 +284,51 @@ export const ChatProvider = ({ children }) => {
     setActiveChatUser(partner);
     setIsTyping(false);
     await fetchMessages(partner._id);
-    
-    // Reset unread count for this chat in local state
-    setChats(prev => 
-      prev.map(chat => 
-        chat.partner._id === partner._id 
-          ? { ...chat, unreadCount: 0 }
-          : chat
-      )
-    );
   };
 
-  // Fetch unread count separately
-  const fetchUnreadCount = async () => {
+  // Pour les clients : sélectionner automatiquement l'admin
+  const initializeClientChat = () => {
+    if (user?.role !== 'admin') {
+      const adminUser = {
+        _id: ADMIN_ID,
+        name: "Support",
+        role: "admin"
+      };
+      setActiveChatUser(adminUser);
+      fetchMessages(ADMIN_ID);
+    }
+  };
+
+  // Clear chat history for a specific conversation
+  const clearChatHistory = (partnerId) => {
     try {
-      const response = await messageAPI.getUnreadCount();
-      setUnreadCount(response.data.unreadCount || 0);
+      const storageKey = getStorageKey(partnerId);
+      if (storageKey) {
+        localStorage.removeItem(storageKey);
+      }
+      setMessages([]);
+      
+      // Recharger les messages depuis l'API
+      if (partnerId) {
+        fetchMessages(partnerId);
+      }
     } catch (err) {
-      console.error('Failed to fetch unread count:', err);
+      console.error('Error clearing chat history:', err);
+      setError('Failed to clear chat history');
     }
   };
 
   // Load chats on token change
   useEffect(() => {
-    if (token) {
-      fetchChats();
-      fetchUnreadCount();
+    if (token && user) {
+      if (user.role === 'admin') {
+        fetchChats();
+      } else {
+        // Pour les clients, initialiser directement le chat avec l'admin
+        initializeClientChat();
+      }
     }
-  }, [token]);
+  }, [token, user]);
 
   // Clear error
   const clearError = () => setError(null);
@@ -276,8 +351,9 @@ export const ChatProvider = ({ children }) => {
         startTyping,
         stopTyping,
         clearError,
-        fetchUnreadCount,
-        socket: socket.current
+        clearChatHistory,
+        initializeClientChat,
+        ADMIN_ID
       }}
     >
       {children}

@@ -95,7 +95,7 @@ const Register = () => {
                 <i className="bi bi-person-plus-fill text-primary fs-1 mb-3"></i>
                 <h2 className="h3 mb-2">Créer un compte</h2>
                 <p className="text-muted">
-                  Rejoignez Parapharmacie TN pour bénéficier de nos offres exclusives
+                  Rejoignez Parapharmacie 25 pour bénéficier de nos offres exclusives
                 </p>
               </div>
 

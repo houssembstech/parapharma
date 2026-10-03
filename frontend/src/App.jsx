@@ -4,10 +4,16 @@ import { useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProductProvider } from './context/ProductContext';
+import { CategoryProvider } from './context/CategoryContext';
 import { ChatProvider } from './context/ChatContext';
 import { StockProvider } from './context/StockContext';
 import { PromotionProvider } from './context/PromotionContext';
 import { ThemeProvider } from './context/ThemeContext';
+import Products from './pages/Products';
+
+import CategoriesPage from './pages/Categories.jsX';
+import CategoryDetail from './pages/CategoryDetail.jsX';
+//import About from './pages/About';
 
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
@@ -39,7 +45,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './styles/custom.css';
 
-
 // Main App component with routing logic
 function AppContent() {
   const { isAuthenticated, initialLoading, user } = useAuth();
@@ -55,8 +60,13 @@ function AppContent() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          
+           {/* Category routes */}
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/categories/:slug" element={<CategoryDetail />} />
           
           {/* Auth routes with redirect if already authenticated */}
           <Route 
@@ -173,24 +183,26 @@ function AppContent() {
   );
 }
 
-// Main App wrapper with all providers
+// Main App wrapper with all providers - FIXED VERSION
 function App() {
   return (
     <ThemeProvider> {/* ThemeProvider should be at the top level */}
       <AuthProvider>
-        <PromotionProvider>
-          <CartProvider>
-            <ProductProvider>
-              <ChatProvider>
+        <CategoryProvider>
+          <ProductProvider>
+            <PromotionProvider>
+              <CartProvider>
                 <StockProvider>
-                  <Router>
-                    <AppContent />
-                  </Router>
+                  <ChatProvider>
+                    <Router>
+                      <AppContent />
+                    </Router>
+                  </ChatProvider>
                 </StockProvider>
-              </ChatProvider>
-            </ProductProvider>
-          </CartProvider>
-        </PromotionProvider>
+              </CartProvider>
+            </PromotionProvider>
+          </ProductProvider>
+        </CategoryProvider>
       </AuthProvider>
     </ThemeProvider>
   );

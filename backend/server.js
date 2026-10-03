@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import { createServer } from 'http';
@@ -21,7 +21,6 @@ import { fileURLToPath } from 'url';
 import konnectRoutes from './routes/konnectRoutes.js';
 import { protect } from './middleware/auth.js';
 
-dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);

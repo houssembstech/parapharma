@@ -567,20 +567,7 @@ const OrderManagement = () => {
                 
                 <div className="col-md-6">
                   <div className="d-flex align-items-center gap-2 flex-wrap justify-content-md-end">
-                    <button
-                      className="btn btn-outline-success d-inline-flex align-items-center"
-                      onClick={() => {
-                        if (filteredOrders.length > 0) {
-                          toast.info("Export CSV bientôt disponible");
-                        } else {
-                          toast.warning("Aucune donnée à exporter");
-                        }
-                      }}
-                      disabled={filteredOrders.length === 0}
-                    >
-                      <FiDownload className="me-2" />
-                      Exporter
-                    </button>
+                    
                     
                     <button
                       className="btn btn-success d-inline-flex align-items-center"

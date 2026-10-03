@@ -158,7 +158,7 @@ const ProductManagement = () => {
     } else if (product.images && product.images.length > 0) {
       return getImageUrl(product.images[0]);
     } else {
-      return '/api/placeholder/50/50';
+      return 'https://placehold.co/400x400?text=Image';
     }
   };
 
@@ -349,7 +349,7 @@ const ProductManagement = () => {
                                 objectFit: "cover",
                               }}
                               onError={(e) => {
-                                e.target.src = '/api/placeholder/50/50';
+                                e.target.src = 'https://placehold.co/400x400?text=Image';
                               }}
                             />
                             <div>

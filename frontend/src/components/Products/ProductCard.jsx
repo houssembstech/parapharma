@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { getImageUrl } from '../../utils/imageHelper'; // ✅ ADD THIS IMPORT
+import { getImageUrl } from '../../utils/imageHelper'; 
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
@@ -60,7 +60,7 @@ const ProductCard = ({ product }) => {
     } else if (product.image) {
       return getImageUrl(product.image);
     } else {
-      return getImageUrl('/api/placeholder/250/250');
+      return getImageUrl('https://placehold.co/400x400?text=Image');
     }
   };
 
@@ -311,28 +311,7 @@ const ProductCard = ({ product }) => {
 
                 {/* Enhanced Quick Actions */}
                 <div className="d-flex justify-content-between align-items-center mt-2">
-                  <button 
-                    className="btn btn-outline-primary btn-sm rounded-pill hover-scale"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      // Compare functionality
-                    }}
-                  >
-                    <i className="bi bi-shuffle me-1"></i>
-                    Comparer
-                  </button>
-                  <button 
-                    className="btn btn-outline-primary btn-sm rounded-pill hover-scale"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      // Share functionality
-                    }}
-                  >
-                    <i className="bi bi-share me-1"></i>
-                    Partager
-                  </button>
+                  
                 </div>
               </div>
             </div>
@@ -382,7 +361,7 @@ const ProductCard = ({ product }) => {
           )}
 
           {/* Enhanced CSS Styles */}
-          <style jsx>{`
+          <style>{`
             .hover-lift {
               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }

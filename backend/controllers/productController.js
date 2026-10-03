@@ -32,7 +32,7 @@ export const createProduct = asyncHandler(async (req, res) => {
   // Handle file uploads
   let imageUrls = [];
   if (req.files && req.files.length > 0) {
-    imageUrls = req.files.map(file => `/uploads/products/${file.filename}`);
+    imageUrls = req.files.map(file => file.path);
   } else if (images && images.length > 0) {
     imageUrls = Array.isArray(images) ? images : [images];
   }
@@ -70,9 +70,18 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
   // Handle file uploads
   if (req.files && req.files.length > 0) {
-    const newImageUrls = req.files.map(file => `/uploads/products/${file.filename}`);
+    const newImageUrls = req.files.map(file => file.path);
     const existingImages = updates.images ? (Array.isArray(updates.images) ? updates.images : [updates.images]) : product.images;
     updates.images = [...existingImages, ...newImageUrls];
+  } else if (updates.images) {
+    updates.images = Array.isArray(updates.images) ? updates.images : [updates.images];
+  }
+
+  // Ensure mainImage is valid and syncs with the first image if not explicitly provided
+  if (!updates.mainImage && updates.images && updates.images.length > 0) {
+    updates.mainImage = updates.images[0];
+  } else if (!updates.images && product.images && product.images.length > 0 && !product.mainImage) {
+    updates.mainImage = product.images[0];
   }
 
   Object.assign(product, updates);

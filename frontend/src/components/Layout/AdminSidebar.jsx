@@ -40,20 +40,20 @@ const AdminSidebar = ({
       description: 'Vue d\'ensemble'
     },
     { 
-      id: 'products', 
+      id: 'stock', 
       label: 'Produits', 
       icon: FiPackage, 
-      path: '/admin/products', 
+      path: '/admin/stock', 
       notification: stats.stockStatus?.outOfStock || 0,
-      description: 'Gestion des produits'
+      description: 'Niveaux de stock'
     },
     { 
-      id: 'stock', 
-      label: 'Gestion Stock', 
+      id: 'products', 
+      label: 'Gestion des produits', 
       icon: FiClipboard, 
-      path: '/admin/stock', 
+      path: '/admin/products', 
       notification: stats.stockStatus?.lowStock || 0,
-      description: 'Niveaux de stock'
+      description: 'Gestion des produits'
     },
     { 
       id: 'orders', 

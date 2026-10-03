@@ -38,7 +38,7 @@ const Login = () => {
                 <i className="bi bi-person-circle text-primary fs-1 mb-3"></i>
                 <h2 className="h3 mb-2">Connexion</h2>
                 <p className="text-muted">
-                  Connectez-vous à votre compte Parapharmacie TN
+                  Connectez-vous à votre compte Parapharmacie 25
                 </p>
               </div>
 

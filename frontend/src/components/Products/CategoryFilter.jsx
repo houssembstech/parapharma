@@ -30,6 +30,7 @@ const CategoryFilter = ({
   // Calculate product counts based on actual products data
   const calculateProductCounts = () => {
     if (!products || products.length === 0) {
+      // If no products provided, use category productCount or 0
       return categories.reduce((acc, category) => {
         acc[category._id] = category.productCount || 0;
         return acc;
@@ -104,7 +105,12 @@ const CategoryFilter = ({
       const categoriesData = response.data.categories || response.data.data || response.data;
 
       if (Array.isArray(categoriesData)) {
-        setCategories(categoriesData);
+        // Ensure each category has a productCount property
+        const categoriesWithCounts = categoriesData.map(category => ({
+          ...category,
+          productCount: category.productCount || 0
+        }));
+        setCategories(categoriesWithCounts);
       } else {
         console.warn("Unexpected API response:", response.data);
         setCategories(fallbackCategories);
@@ -377,7 +383,7 @@ const CategoryFilter = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .filter-section-content {
           transition: all 0.3s ease-in-out;
           overflow: hidden;

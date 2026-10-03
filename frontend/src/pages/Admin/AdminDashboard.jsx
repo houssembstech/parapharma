@@ -953,7 +953,7 @@ const AdminDashboard = () => {
       )}
 
       {/* Add custom styles for pulse animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes pulse-green {
           0%, 100% { opacity: 0; }
           50% { opacity: 0.1; }

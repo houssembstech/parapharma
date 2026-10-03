@@ -361,7 +361,7 @@ const AdminChat = () => {
         ></div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .typing-indicator {
           display: flex;
           align-items: center;

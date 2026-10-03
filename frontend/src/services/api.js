@@ -66,19 +66,17 @@ export const messageAPI = {
 };
 
 // Promotion API with separate public/admin endpoints
+// Promotion API
 export const promotionAPI = {
-  // ✅ PUBLIC endpoints - no admin required
   getActivePromotions: () => API.get('/promotions/public/active'),
   validatePromotion: (data) => API.post('/promotions/public/validate', data),
-  
-  // ✅ ADMIN endpoints - require admin access
+  getPromotions: () => API.get('/promotions'),
   getAllPromotions: () => API.get('/promotions'),
   createPromotion: (data) => API.post('/promotions', data),
   updatePromotion: (id, data) => API.put(`/promotions/${id}`, data),
   deletePromotion: (id) => API.delete(`/promotions/${id}`),
   getPromotionStats: () => API.get('/promotions/admin/stats'),
 };
-
 // Dashboard API
 export const dashboardAPI = {
   getStats: (range = 'today') => API.get(`/admin/dashboard?range=${range}`),
@@ -209,10 +207,61 @@ export const productAPI = {
 
 // Category API
 export const categoryAPI = {
-  getCategories: () => API.get('/categories'),
+  // Get all categories with pagination and search
+  getAllCategories: (page = 1, limit = 50, search = '') => {
+    const params = new URLSearchParams();
+    if (page) params.append('page', page);
+    if (limit) params.append('limit', limit);
+    if (search) params.append('search', search);
+    
+    return API.get(`/categories?${params.toString()}`);
+  },
+  
+  // Get categories (simple version without pagination)
+  getCategories: () => API.get('/categories?limit=100'),
+  
+  // Get category by ID
+  getCategoryById: (id) => API.get(`/categories/${id}`),
+  
+  // Get category by slug (you'll need to add this endpoint to your backend)
+  getCategoryBySlug: (slug) => API.get(`/categories/slug/${slug}`),
+  
+  // Search categories
+  searchCategories: (query) => API.get(`/categories/search?query=${query}`),
+  
+  // Create new category
   createCategory: (categoryData) => API.post('/categories', categoryData),
-  updateCategory: (categoryId, categoryData) => API.put(`/categories/${categoryId}`, categoryData),
-  deleteCategory: (categoryId) => API.delete(`/categories/${categoryId}`),
+  
+  // Update category
+  updateCategory: (id, updateData) => API.put(`/categories/${id}`, updateData),
+  
+  // Delete category (soft delete)
+  deleteCategory: (id) => API.delete(`/categories/${id}`),
+  
+  // Get featured categories - client-side filtering since your backend doesn't have this field
+  getFeaturedCategories: () => API.get('/categories?limit=100').then(response => {
+    const categories = response.data.categories || response.data;
+    // Since your model doesn't have 'featured' field, we'll return first 4 categories
+    return { data: categories.slice(0, 4) };
+  }),
+  
+  // Get categories with stats - client-side implementation
+  getCategoriesWithStats: () => API.get('/categories?limit=100').then(response => {
+    const categories = response.data.categories || response.data;
+    // Add mock product counts since your model doesn't have this relationship yet
+    const categoriesWithStats = categories.map((category, index) => ({
+      ...category,
+      productCount: Math.floor(Math.random() * 100) + 10 // Mock data
+    }));
+    return { data: categoriesWithStats };
+  }),
+  
+  // Get categories by type - client-side filtering
+  getCategoriesByType: (type) => API.get('/categories?limit=100').then(response => {
+    const categories = response.data.categories || response.data;
+    // Since your model doesn't have 'type' field, return all categories
+    return { data: categories };
+  }),
 };
 
 // Enhanced utility functions
