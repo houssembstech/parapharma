@@ -81,7 +81,7 @@ const OrderManagement = () => {
     
     setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/orders`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/orders`, {
         headers: { 
           Authorization: `Bearer ${getAuthToken()}`,
           'Content-Type': 'application/json'

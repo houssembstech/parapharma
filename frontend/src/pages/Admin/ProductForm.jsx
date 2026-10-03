@@ -58,7 +58,7 @@ const ProductForm = () => {
     const fetchCategories = async () => {
       setLoadingCategories(true);
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/categories`);
 
         if (Array.isArray(data)) {
           setCategories(data);
@@ -192,7 +192,7 @@ const ProductForm = () => {
         setMessage("✅ Product updated successfully! Redirecting...");
       } else {
         await axios.post(
-          `${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/products`,
+          `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/products`,
           submitData,
           config
         );

@@ -43,7 +43,7 @@ const CategoryManagement = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/categories`, {
         params: { page, limit, search: searchTerm },
       });
 
@@ -91,7 +91,7 @@ const CategoryManagement = () => {
       setError("");
       setSuccessMessage("");
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/categories`, {
         name: createForm.name.trim(),
         description: createForm.description ? createForm.description.trim() : "",
       });

@@ -46,7 +46,7 @@ const ProductManagement = () => {
   const fetchDashboardStats = async () => {
     try {
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/dashboard/stats`, config);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/dashboard/stats`, config);
       setStats(data);
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
@@ -70,7 +70,7 @@ const ProductManagement = () => {
   const fetchCategories = async () => {
     setLoadingCategories(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/categories`);
       const cats = Array.isArray(data) ? data : data.categories || [];
       setCategories(cats);
       setErrorCategories(null);
@@ -90,7 +90,7 @@ const ProductManagement = () => {
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/products`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/products`,
         config
       );
       const productsData = Array.isArray(data.products) ? data.products : data || [];

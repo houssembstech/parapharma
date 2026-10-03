@@ -94,7 +94,7 @@ const CategoryFilter = ({
       if (!isRetry) setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/categories`, {
         timeout: 10000,
         headers: {
           "Cache-Control": "no-cache",
