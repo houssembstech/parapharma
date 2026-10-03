@@ -19,7 +19,7 @@ export const ProductProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.get('http://localhost:5000/api/products'); // Update backend URL if needed
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/products`); // Update backend URL if needed
       if (response.data?.products) {
         setProducts(response.data.products);
       } else {

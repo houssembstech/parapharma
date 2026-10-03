@@ -20,7 +20,7 @@ export const getImageUrl = (imagePath) => {
   }
 
   // For relative paths, prepend the backend URL
-  const baseUrl = 'http://localhost:5000'; // Hardcoded base URL
+  const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'; // Hardcoded base URL
   
   // Ensure the path starts with a slash
   const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;

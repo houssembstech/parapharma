@@ -27,7 +27,7 @@ const AddCategory = () => {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      await axios.post("http://localhost:5000/api/categories", form, config);
+      await axios.post(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, form, config);
       setMessage("✅ Category added successfully!");
       setTimeout(() => navigate("/admin/categories"), 1500);
     } catch (err) {

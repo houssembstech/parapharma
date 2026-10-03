@@ -58,7 +58,7 @@ const ProductForm = () => {
     const fetchCategories = async () => {
       setLoadingCategories(true);
       try {
-        const { data } = await axios.get("http://localhost:5000/api/categories");
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`);
 
         if (Array.isArray(data)) {
           setCategories(data);
@@ -84,7 +84,7 @@ const ProductForm = () => {
       const fetchProduct = async () => {
         setLoadingProduct(true);
         try {
-          const { data } = await axios.get(`http://localhost:5000/api/products/${productId}`);
+          const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}/products/${productId}`);
           
           setFormData({
             name: data.name || "",
@@ -185,14 +185,14 @@ const ProductForm = () => {
 
       if (isEditMode) {
         await axios.put(
-          `http://localhost:5000/api/products/${productId}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}/products/${productId}`,
           submitData,
           config
         );
         setMessage("✅ Product updated successfully! Redirecting...");
       } else {
         await axios.post(
-          "http://localhost:5000/api/products",
+          `${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/products`,
           submitData,
           config
         );

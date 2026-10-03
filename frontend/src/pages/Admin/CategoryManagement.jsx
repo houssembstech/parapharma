@@ -43,7 +43,7 @@ const CategoryManagement = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get("http://localhost:5000/api/categories", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, {
         params: { page, limit, search: searchTerm },
       });
 
@@ -91,7 +91,7 @@ const CategoryManagement = () => {
       setError("");
       setSuccessMessage("");
 
-      const response = await axios.post("http://localhost:5000/api/categories", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || "${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}"}/categories`, {
         name: createForm.name.trim(),
         description: createForm.description ? createForm.description.trim() : "",
       });
@@ -133,7 +133,7 @@ const CategoryManagement = () => {
       setSuccessMessage("");
 
       const response = await axios.put(
-        `http://localhost:5000/api/categories/${editForm._id}`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}/categories/${editForm._id}`,
         {
           name: editForm.name.trim(),
           description: editForm.description ? editForm.description.trim() : "",
@@ -162,7 +162,7 @@ const CategoryManagement = () => {
       setSuccessMessage("");
 
       const response = await axios.delete(
-        `http://localhost:5000/api/categories/${id}`
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}/categories/${id}`
       );
 
       setSuccessMessage(response.data.message || "Category deleted successfully");
