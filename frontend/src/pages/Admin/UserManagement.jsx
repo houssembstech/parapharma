@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { adminAPI } from '../../services/api';
-import AdminSidebar from '../../components/layout/AdminSidebar';
-import AdminMobileHeader from '../../components/layout/AdminMobileHeader';
+import AdminSidebar from '../../components/Layout/AdminSidebar';
+import AdminMobileHeader from '../../components/Layout/AdminMobileHeader';
 import { FiUsers, FiSearch, FiCalendar, FiEye, FiEdit, FiTrash2, FiUserPlus } from 'react-icons/fi';
 
 const UserManagement = () => {

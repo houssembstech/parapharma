@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useStock } from '../../context/StockContext';
-import AdminSidebar from '../../components/layout/AdminSidebar';
-import AdminMobileHeader from '../../components/layout/AdminMobileHeader';
+import AdminSidebar from '../../components/Layout/AdminSidebar';
+import AdminMobileHeader from '../../components/Layout/AdminMobileHeader';
 import { FiPackage, FiSearch, FiRefreshCw, FiAlertTriangle, FiCheckCircle, FiXCircle, FiPlus } from 'react-icons/fi';
 import { getImageUrl } from '../../utils/imageHelper'; // ✅ IMPORT CORRIGÉ
 
