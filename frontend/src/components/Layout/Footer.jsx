@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="col-lg-4 mb-4">
             <h5 className="text-primary mb-3 d-flex align-items-center">
               <i className="bi bi-heart-pulse-fill me-2"></i>
-              Parapharmacie 25
+              Parapharmacie
             </h5>
             <p className="text-light-emphasis mb-4" style={{ color: '#b0b7c3' }}>
               Votre parapharmacie en ligne de confiance en Tunisie. 
@@ -109,7 +109,7 @@ const Footer = () => {
             </div>
             <div className="d-flex align-items-center mb-3">
               <i className="bi bi-envelope-fill text-primary me-3 fs-6"></i>
-              <span className="text-light-emphasis" style={{ color: '#b0b7c3' }}>contact@parapharmacie25.tn</span>
+              <span className="text-light-emphasis" style={{ color: '#b0b7c3' }}>contact@parapharmacie.tn</span>
             </div>
             <div className="d-flex align-items-start">
               <i className="bi bi-clock-fill text-primary me-3 fs-6 mt-1"></i>

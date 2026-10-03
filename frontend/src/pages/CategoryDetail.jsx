@@ -58,18 +58,20 @@ const CategoryDetail = () => {
           <div className="col-12">
             <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
               <div className="row g-0">
-                <div className="col-md-4">
-                  <img 
-                    src={category.image} 
-                    className="card-img h-100"
-                    alt={category.name}
-                    style={{ objectFit: 'cover', height: '250px' }}
-                    onError={(e) => {
-                      e.target.src = 'https://placehold.co/400x400?text=Image';
-                    }}
-                  />
-                </div>
-                <div className="col-md-8">
+                {category.image && (
+                  <div className="col-md-4">
+                    <img 
+                      src={category.image} 
+                      className="card-img h-100"
+                      alt={category.name}
+                      style={{ objectFit: 'cover', height: '250px', width: '100%' }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+                <div className={category.image ? "col-md-8" : "col-12"}>
                   <div className="card-body p-4 d-flex flex-column h-100">
                     <h1 className="display-5 fw-bold text-dark mb-3">
                       {category.name}

@@ -165,8 +165,8 @@ const Navbar = () => {
             <div className="logo-glow"></div>
           </div>
           <div className="logo-text">
-            <span className="text-primary fw-bold">Parapharma</span>
-            <span className={`fw-bold ${darkMode ? 'text-light' : 'text-dark'}`}>25</span>
+            <span className="text-primary fw-bold">Parapharmacie</span>
+            
           </div>
         </Link>
 

@@ -8,6 +8,7 @@ import ProductCard from "../components/Products/ProductCard";
 import SearchBar from '../components/Common/SearchBar';
 
 import { getImageUrl } from "../utils/imageHelper";
+import { motion } from "framer-motion";
 import { 
   FiSearch, 
   FiRefreshCw, 
@@ -526,142 +527,126 @@ const Home = () => {
       
       
 
-      {/* Enhanced Hero Section */}
+      {/* Enhanced Hero Section with Maximum UI/UX & Animations */}
       <section className="hero-section position-relative overflow-hidden" style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3e0e2ff 100%)'
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)'
       }}>
-        <div className="container">
-          <div className="row align-items-center min-vh-100 py-5">
+        {/* Ambient Animated Blobs */}
+        <div className="hero-gradient-overlay">
+          <div className="ambient-blob blob-1"></div>
+          <div className="ambient-blob blob-2"></div>
+        </div>
+
+        <div className="container position-relative z-1 pt-5 mt-5">
+          <div className="row align-items-center min-vh-100 pb-5">
             <div className="col-lg-6">
-              <div className="hero-content">
+              <motion.div 
+                className="hero-content"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              >
                 {/* Badge */}
-                <div className="badge bg-success bg-opacity-10 text-success fs-6 fw-semibold px-3 py-2 rounded-pill mb-3">
-                  <FiZap className="me-1" />
-                  Nouvelle Collection 2025
-                </div>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="badge glassmorphism-card text-success fs-6 fw-semibold px-4 py-2 rounded-pill mb-4 shadow-sm"
+                >
+                  <FiHeart className="me-1" />
+                  Santé & Beauté au Quotidien
+                </motion.div>
                 
-                <h1 className="display-4 fw-bold text-dark mb-4">
-                  Découvrez nos 
+                <motion.h1 
+                  className="display-4 fw-bold text-dark mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                >
+                  Prenez soin de vous <br/> avec nos
                   <span style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text'
-                  }}> Catégories</span> 
-                  Premium
-                </h1>
+                  }}> gammes expertes</span>
+                </motion.h1>
                 
-                <p className="lead text-muted mb-4 fs-5">
-                  Explorez nos <strong>{stats.totalCategories}</strong> catégories avec <strong>{stats.totalProducts}</strong> produits. 
-                  Expérience shopping premium avec livraison express et paiement 100% sécurisé.
-                </p>
+                <motion.p 
+                  className="lead text-muted mb-5 fs-5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                >
+                  Découvrez une large sélection de soins dermo-cosmétiques, de compléments alimentaires et d'articles d'hygiène pour toute la famille. 
+                  Livraison express garantie à domicile.
+                </motion.p>
                 
-                {/* Enhanced Search Bar */}
-                <div className="row mb-4">
-                  <div className="col-12">
-                    <SearchBar 
+                {/* Enhanced Search Bar with Glassmorphism */}
+                <motion.div 
+                  className="row mb-5"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                >
+                  <div className="col-12 glassmorphism-card p-3 rounded-4 shadow-sm">
+                     <SearchBar 
                       onSearch={handleSearch}
-                      placeholder="Rechercher des catégories, produits..."
+                      placeholder="Rechercher un produit, une marque..."
                       size="large"
                     />
                   </div>
-                </div>
-
-                {/* Quick Filters Bar */}
-                <div className="quick-filters mb-4">
-                  <div className="d-flex flex-wrap gap-2">
-                    {quickFilters.map((filter) => {
-                      const IconComponent = filter.icon;
-                      return (
-                        <button
-                          key={filter.id}
-                          className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2 rounded-pill"
-                          onClick={filter.action}
-                        >
-                          <IconComponent size={14} />
-                          {filter.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Enhanced Statistics - CORRIGÉ */}
-                <div className="stats-section mb-4">
-                  <div className="row g-3">
-                    <div className="col-auto">
-                      <div className="stat-card bg-white shadow-sm rounded-3 p-3 text-center">
-                        <div className="text-success fs-4 fw-bold">{stats.totalCategories}</div>
-                        <small className="text-muted">Catégories</small>
-                      </div>
-                    </div>
-                    <div className="col-auto">
-                      <div className="stat-card bg-white shadow-sm rounded-3 p-3 text-center">
-                        <div className="text-primary fs-4 fw-bold">{stats.totalProducts}</div>
-                        <small className="text-muted">Produits</small>
-                      </div>
-                    </div>
-                    <div className="col-auto">
-                      <div className="stat-card bg-white shadow-sm rounded-3 p-3 text-center">
-                        <div className="text-warning fs-4 fw-bold">{stats.featuredCategoriesCount}</div>
-                        <small className="text-muted">Premium</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </motion.div>
 
                 {/* Enhanced CTA Buttons */}
-                <div className="hero-actions d-flex flex-column flex-sm-row gap-3">
-                  <Link to="/categories" className="btn btn-primary btn-lg px-4 py-3 fw-bold rounded-3 d-flex align-items-center justify-content-center shadow-lg">
+                <motion.div 
+                  className="hero-actions d-flex flex-column flex-sm-row gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.6 }}
+                >
+                  <Link to="/categories" className="btn btn-primary premium-btn-pulse btn-lg px-5 py-3 fw-bold rounded-pill d-flex align-items-center justify-content-center shadow-lg border-0" style={{ background: 'linear-gradient(45deg, #10b981, #059669)'}}>
                     <FiShoppingBag className="me-2" />
                     Explorer les Catégories
                   </Link>
-                  <Link to="/products" className="btn btn-outline-dark btn-lg px-4 py-3 fw-bold rounded-3 d-flex align-items-center justify-content-center">
+                  <Link to="/products" className="btn btn-light btn-lg px-5 py-3 fw-bold rounded-pill d-flex align-items-center justify-content-center shadow-sm" style={{ border: '2px solid rgba(16, 185, 129, 0.2)', color: '#059669' }}>
                     <FiPackage className="me-2" />
                     Voir Tous les Produits
                   </Link>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
             
             <div className="col-lg-6 text-center mt-5 mt-lg-0">
-              <div className="hero-visual position-relative">
+              <motion.div 
+                className="hero-visual position-relative"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
                 {/* Main Visual */}
-                <div className="main-visual rounded-4 p-5 shadow-lg position-relative overflow-hidden" style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
-                  transition: 'transform 0.3s ease'
-                }}>
-                  <div className="position-relative z-3">
-                    <FiLayers size={140} className="text-white opacity-75" />
-                  </div>
-                  
-                  {/* Floating Elements */}
-                  <div className="position-absolute top-0 start-0 mt-4 ms-4">
-                    <div className="floating-badge bg-success text-white rounded-3 p-2 shadow">
-                      <FiStar className="me-1" />
-                      Premium
-                    </div>
-                  </div>
-                  
-                  <div className="position-absolute bottom-0 end-0 mb-4 me-4">
-                    <div className="floating-badge bg-warning text-dark rounded-3 p-2 shadow">
-                      <FiGift className="me-1" />
-                      Diversifié
-                    </div>
-                  </div>
-                </div>
-                
-                             
-                <div className="position-absolute bottom-0 start-0 mb-3 ms-3">
-                  <div className="floating-card bg-white rounded-3 p-3 shadow-lg">
-                    <div className="text-primary fs-6 fw-bold">📦 {stats.totalProducts}</div>
-                    <small className="text-muted">Produits réels</small>
-                  </div>
-                </div>
-              </div>
+                <motion.img 
+                  src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80" 
+                  alt="Parapharmacie Premium" 
+                  className="img-fluid shadow-lg chain-img-hover"
+                  animate={{ y: [0, -15, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    maxHeight: '500px',
+                    objectFit: 'cover',
+                    borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
+                    border: '8px solid rgba(255,255,255,0.5)'
+                  }}
+                />
+              </motion.div>
             </div>
           </div>
+        </div>
+
+        <div className="hero-chain-wave text-white">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,119.33,193.36,104.9,239.31,94.34,281.71,72.48,321.39,56.44Z" fill="currentColor"></path>
+          </svg>
         </div>
       </section>
 
